@@ -1,6 +1,6 @@
 # BlackJack Card Game
 
-
+# Importing the random module for shuffling the deck
 import random
 
 # List of card suits
@@ -16,11 +16,14 @@ class Card:
         # Initialize card rank
         self.rank = rank
 
+
+# Define a class for a playing card with a rank and suit
+def __str__(self):
     # Return string representation of the card
-    def __str__(self):
-        return f"{self.rank} of {self.suit}"
+    return f"{self.rank} of {self.suit}"
 
 
+# Define a class for a deck of cards
 class Deck:
     def __init__(self, suits, ranks):
         # Initialize an empty list to hold cards
@@ -35,46 +38,39 @@ class Deck:
     def __str__(self):
         deck_string = ""
         for card in self.cards:
-            # Concatenate the string representation of each card
             deck_string += " " + str(card)
-        # Return the string representation of the deck
         return deck_string
 
+    # Shuffle the deck of cards
     def shuffle(self):
-        # Shuffle the deck
         random.shuffle(self.cards)
 
 
+# Define a class for a dealer
 class Dealer:
     def __init__(self):
-        # Initialize an empty list to hold dealer's cards
         self.hand = []
 
     def __str__(self):
-        # Return the string representation of the dealer
         return "Dealer"
 
-    def hit(self, card):
-        # Add a card to the dealer's hand
-        self.hand.append(card)
 
-
+# Define a class for a player
 class Player:
     def __init__(self, name):
-        # Initialize an empty list to hold player's cards
         self.hand = []
-        # Initialize player's name
         self.name = name
 
     def __str__(self):
-        # Return the player's name as the string representation
         return self.name
 
-    def hit(self, card):
-        # Add a card to the player's hand
-        self.hand.append(card)
+    # Ask the player for their choice to hit or stay
+    def choice(self):
+        choice = input("Would you like to (h)it or (s)tay? ")
+        return choice
 
 
+# Define a class for the game
 class Game:
     def __init__(self, suits, ranks):
         # Create a player object with the player's name
@@ -85,24 +81,43 @@ class Game:
         self.deck = Deck(suits, ranks)
         # Shuffle the deck
         self.deck.shuffle()
+        self.deal_card(self.player)
+        self.deal_card(self.dealer)
+        self.deal_card(self.player)
+        self.deal_card(self.dealer)
+        self.show_cards()
 
+    # Get the player's name
     def get_player_name(self):
-        # Prompt the user to enter their name
         name = input("What is your name? ")
-        # Return the player's name
         return name
 
-    def __str__(self):
-        # Return the string representation of the game
-        return f"Game: {self.player} vs. {self.dealer}\nDeck: {self.deck}"
+    # Deal a card to a person (player or dealer)
+    def deal_card(self, person):
+        card = self.deck.cards.pop()
+        person.hand.append(card)
+
+    # Show the cards of the player and the dealer
+    def show_cards(self):
+        print(f"{self.player} has:")
+        for card in self.player.hand:
+            print(card)
+        print("Dealer has: ")
+        for card in self.dealer.hand:
+            print(card)
+
+    # Handle the player's decision to hit or stay
+    def player_hand(self):
+        choice = self.player.choice()
+        if choice == "h":
+            self.deal_card(self.player)
 
 
-def main():
-    # Create a new game object
-    new_game = Game(MY_SUITS, MY_RANKS)
-    # Print the string representation of the game
-    print(new_game)
+# Create a new game object with specified suits and ranks
+new_game = Game(MY_SUITS, MY_RANKS)
 
+# Let the player play their hand
+new_game.player_hand()
 
-if __name__ == "__main__":
-    main()
+# Show the cards after the player's move
+new_game.show_cards()
